@@ -9,7 +9,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor(force = true)
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type_document")
 public abstract class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

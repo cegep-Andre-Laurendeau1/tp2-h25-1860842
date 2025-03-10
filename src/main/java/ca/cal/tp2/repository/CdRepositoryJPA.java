@@ -21,7 +21,7 @@ public class CdRepositoryJPA implements CdRepository {
             em.persist(cd);
             em.getTransaction().commit();
         } catch (Exception e) {
-            throw new DatabaseException(e);
+            throw new DatabaseException("Erreur lors de l'ajout du CD", e);
         }
     }
 

@@ -8,12 +8,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(force = true)
-@Table(name = "LIVRE")
+@DiscriminatorValue("Livre")
 public class Livre extends Document{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     private String auteur;
     private long anneePublication;
 

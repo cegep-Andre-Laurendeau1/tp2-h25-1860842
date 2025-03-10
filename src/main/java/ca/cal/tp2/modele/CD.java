@@ -8,12 +8,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(force = true)
-@Table(name = "CD")
-public class CD  extends Document{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+@DiscriminatorValue("CD")
+public class CD extends Document{
     private String artiste, genre;
     private long duration;
 

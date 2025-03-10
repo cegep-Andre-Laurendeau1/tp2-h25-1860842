@@ -11,6 +11,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.util.List;
+
 public class EmprunteurService {
 
     private final EmprunteurRepositoryJPA emprunteurRepository;
@@ -20,59 +22,35 @@ public class EmprunteurService {
         this.emprunteurRepository = emprunteurRepository;
         this.documentRepository = documentRepository;
     }
+
     // save gere les requetes CREATE or UPDATE
     Emprunteur emprunteur;
 
     public void emprunteDocument(long emprunteurId, long documentId) throws DatabaseException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tp2.pu");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-
-            Emprunteur emprunteur = em.find(Emprunteur.class, emprunteurId);
-            if (emprunteur == null) {
-                throw new RuntimeException("Emprunteur introuvable");
-            }
-
-            Document document = em.find(Document.class, documentId);
-            if (document == null) {
-                throw new RuntimeException("Document introuvable");
-            }
-
-            if (document.getNbExemplaires() <= 0) {
-                throw new RuntimeException("Aucun exemplaire disponible pour ce document");
-            }
-
-            Emprunt nouvelEmprunt = new Emprunt();
-            nouvelEmprunt.setEmprunteur(emprunteur);
-            nouvelEmprunt.setDocument(document);
-
-            em.persist(nouvelEmprunt);
-
-            document.setNbExemplaires(document.getNbExemplaires() - 1);
-            em.merge(document);
-
-            emprunteur.getEmprunts().add(nouvelEmprunt);
-            em.merge(emprunteur);
-
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new RuntimeException("Erreur lors de l'emprunt du document", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+        Document document = documentRepository.find(documentId);
+        if (document == null) {
+            throw new DatabaseException("Document non trouvé.");
         }
 
-
+        try {
+            emprunteurRepository.emprunte(document, emprunteurId);
+            System.out.println("Document emprunté avec succès.");
+        } catch (DatabaseException e) {
+            throw new DatabaseException("Erreur lors de l'emprunt du document.", e);
+        }
     }
+
     public void retourneDocument(Document document) {}
     public void payeAmende(double amende){}
-    public void getRapportHistoriqueEmprunt(){}
+
+    public List<Emprunt> getRapportsEmprunts(long emprunteurId){
+        try {
+            Emprunteur emprunteur = emprunteurRepository.find(emprunteurId);
+            return emprunteur.getEmprunts();
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des emprunts de l'emprunteur", e);
+        }
+    }
 
     public Emprunteur getEmprunteur(){
         return null;

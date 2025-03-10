@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-@Table(name = "PREPOSE")
-public class Prepose extends Utilisateur{
+@DiscriminatorValue("PREPOSE")
+public class Prepose extends Utilisateur {
+    @Column(unique = true)
     private String numEmploye;
 
     public Prepose(String firstName, String lastName, String email, String phoneNumber, String numEmploye) {

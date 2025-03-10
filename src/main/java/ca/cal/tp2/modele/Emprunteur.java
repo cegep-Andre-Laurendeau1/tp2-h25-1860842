@@ -10,14 +10,14 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(force = true)
-@Table(name = "EMPRUNTEUR")
+@DiscriminatorValue("EMPRUNTEUR")
 public class Emprunteur extends Utilisateur{
     private double fineBalance;
 
     @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.ALL)
     private List<Emprunt> emprunts;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Amende> amendes;
 
     public Emprunteur (String firstName, String lastName, String email, String phoneNumber,

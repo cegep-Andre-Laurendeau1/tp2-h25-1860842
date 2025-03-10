@@ -57,7 +57,11 @@ public class PreposeService {
     }
 
     public void saveCd(String titre, String artiste, long duration, String genre, long nbExemplaires) throws DatabaseException {
-        cdRepository.save(new CD(titre, artiste, duration, genre, nbExemplaires));
+        try {
+            cdRepository.save(new CD(titre, artiste, duration, genre, nbExemplaires));
+        } catch (DatabaseException e) {
+            System.out.println("Erreur lors de la création du CD");
+        }
     }
 
     public CdDTO findCd(long id) {
@@ -69,7 +73,11 @@ public class PreposeService {
     }
 
     public void saveDvd(String titre, String director, long duree, String rating, long nbExemplaires) throws DatabaseException {
-        dvdRepository.save(new DVD(titre, director, duree, rating, nbExemplaires));
+        try {
+            dvdRepository.save(new DVD(titre, director, duree, rating, nbExemplaires));
+        } catch (DatabaseException e) {
+            System.out.println("Erreur lors de la création du DVD");
+        }
     }
 
     public DvdDTO findDvd(long id) throws DatabaseException {
@@ -81,7 +89,11 @@ public class PreposeService {
     }
 
     public void saveLivre(String titre, String auteur, long anneePublication, long nbExemplaires) throws DatabaseException {
-        livreRepository.save(new Livre(titre, auteur, anneePublication, nbExemplaires));
+        try {
+            livreRepository.save(new Livre(titre, auteur, anneePublication, nbExemplaires));
+        } catch (DatabaseException e) {
+            System.out.println("Erreur lors de la création du livre");
+        }
     }
 
     public LivreDTO findLivre(long id) throws DatabaseException {
@@ -91,5 +103,15 @@ public class PreposeService {
         }
         return LivreDTO.toDto(livre);
     }
+
+    public List<Emprunt> getRapportEmprunts() throws DatabaseException {
+        try {
+            return preposeRepository.getRapportEmprunts(); // Assuming the method is implemented in PreposeRepositoryJPA
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des emprunts", e);
+        }
+    }
+
+
 
 }

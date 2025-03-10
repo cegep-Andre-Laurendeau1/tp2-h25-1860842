@@ -18,13 +18,17 @@ public class Main {
                                                 new DvdRepositoryJPA(),
                                                 new LivreRepositoryJPA());
 
+        EmprunteurService es = new EmprunteurService(
+                new EmprunteurRepositoryJPA(),
+                new DocumentRepositoryJPA());
+
         ps.createPrepose("Edouard", "Roger", "edouard@gmail.com",
                 "4389694949", "3453");
         ps.createEmprunteur("Lois", "Lane", "lois@hotmail.com",
                 "5141234567", 56.54, null, null);
 
         System.out.println(ps.findPrepose(1));
-        System.out.println(ps.findEmprunteur(1));
+        System.out.println(ps.findEmprunteur(2));
 
         ps.saveCd("Thriller", "Michael Jackson", 42, "Pop", 5);
         ps.saveCd("The Wall", "Pink Floyd", 42, "Rock", 6);
@@ -34,7 +38,11 @@ public class Main {
         ps.saveLivre("The Hobbit", "J.R.R. Tolkien", 2012, 2);
         System.out.println(ps.findCd(1));
 
+        es.emprunteDocument(2,1);
 
+        System.out.println(es.getRapportsEmprunts(2));
+
+        System.out.println(ps.findEmprunteur(2));
         System.out.println(ps.findPrepose(1));
         Thread.currentThread().join();
     }

@@ -8,12 +8,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(force = true)
-@Table(name = "DVD")
-public class DVD extends Document{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+@DiscriminatorValue("DVD")
+public class DVD extends Document {
     private String director, rating;
     private long duree;
 

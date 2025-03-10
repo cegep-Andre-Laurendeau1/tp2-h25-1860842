@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Emprunt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date dateEmprunt;
+    private LocalDate dateEmprunt;
     private String status;
 
     @ManyToOne
@@ -32,7 +33,7 @@ public class Emprunt {
     private Document document;
 
 
-    public Emprunt(Date dateEmprunt, String status, Emprunteur emprunteur, Document document) {
+    public Emprunt(LocalDate dateEmprunt, String status, Emprunteur emprunteur, Document document) {
         this.dateEmprunt = dateEmprunt;
         this.status = status;
         this.emprunteur = emprunteur;
