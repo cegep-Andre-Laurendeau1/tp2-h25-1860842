@@ -1,7 +1,8 @@
 package ca.cal.tp2.exception;
 
-public class DuplicateEntityException extends RuntimeException {
-  public DuplicateEntityException(String message) {
-    super(message);
-  }
+import jakarta.persistence.RollbackException;
+
+public class DuplicateEntityException extends Exception {
+    public DuplicateEntityException(RollbackException e) {
+    }
 }
