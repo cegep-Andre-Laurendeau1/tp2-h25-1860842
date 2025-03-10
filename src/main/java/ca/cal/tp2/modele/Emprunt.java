@@ -45,9 +45,9 @@ public class Emprunt {
     @Override
     public String toString() {
         return "Emprunt{" +
-                "id=" + id +
+                "Emprunteur='" + emprunteur.getFirstName() + " " + emprunteur.getLastName() + '\'' +
+                ", idEmprunt=" + id +
                 ", document='" + document.getTitre() + '\'' +
-                ", emprunteur='" + emprunteur.getFirstName() + " " + emprunteur.getLastName() + '\'' +
                 ", dateEmprunt=" + dateEmprunt +
                 ", dateRetour=" + dateRetour +
                 ", status='" + status + '\'' +

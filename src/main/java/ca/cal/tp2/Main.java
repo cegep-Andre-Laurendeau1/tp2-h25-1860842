@@ -39,16 +39,19 @@ public class Main {
 
         es.emprunteDocument(2,1);
         es.emprunteDocument(2, 3);
+        es.emprunteDocument(2, 4);
 
+        // Cette ligne donne une erreur car le document id 4 n'a qu'un seul exemplaire
+        //es.emprunteDocument(2, 4);
 
         System.out.println(ps.findEmprunteur(2));
         System.out.println(ps.findPrepose(1));
 
         System.out.println(es.getRapportsEmprunts(2));
-        //System.out.println(es.getRapportsEmprunts(3));
 
         System.out.println(ps.findCdByTitle("Wall"));
         System.out.println(ps.findLivreByAuthor("Rowling"));
+
         Thread.currentThread().join();
     }
 }
