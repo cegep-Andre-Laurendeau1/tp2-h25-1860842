@@ -60,8 +60,8 @@ public class CdRepositoryJPA implements CdRepository {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             TypedQuery<CD> query = em.createQuery(
-                    "SELECT c FROM CD c WHERE c.artiste = :artiste", CD.class);
-            query.setParameter("artiste", artiste);
+                    "SELECT c FROM CD c WHERE c.artiste LIKE :artiste", CD.class);
+            query.setParameter("artiste", "%" + artiste + "%");
             CD cd = query.getSingleResult();
             em.getTransaction().commit();
             return cd;

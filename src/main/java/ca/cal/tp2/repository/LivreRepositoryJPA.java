@@ -38,8 +38,9 @@ public class LivreRepositoryJPA implements LivreRepository {
     public Livre findByAuthor(String auteur) throws DatabaseException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            TypedQuery<Livre> query = em.createQuery("SELECT l FROM Livre l WHERE l.auteur = :auteur", Livre.class);
-            query.setParameter("auteur", auteur);
+            TypedQuery<Livre> query = em.createQuery(
+                    "SELECT l FROM Livre l WHERE l.auteur LIKE :auteur", Livre.class);
+            query.setParameter("auteur", "%" + auteur + "%");
             Livre livre = query.getSingleResult();
             em.getTransaction().commit();
             return livre;

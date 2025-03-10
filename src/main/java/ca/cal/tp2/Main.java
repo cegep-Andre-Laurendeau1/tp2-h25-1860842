@@ -26,9 +26,8 @@ public class Main {
                 "4389694949", "3453");
         ps.createEmprunteur("Lois", "Lane", "lois@hotmail.com",
                 "5141234567", 56.54, null, null);
-
-        System.out.println(ps.findPrepose(1));
-        System.out.println(ps.findEmprunteur(2));
+        ps.createEmprunteur("Jean", "Louis", "jean@hotmail.com",
+                "5141234567", 3.42, null, null);
 
         ps.saveCd("Thriller", "Michael Jackson", 42, "Pop", 5);
         ps.saveCd("The Wall", "Pink Floyd", 42, "Rock", 6);
@@ -39,11 +38,17 @@ public class Main {
         System.out.println(ps.findCd(1));
 
         es.emprunteDocument(2,1);
+        es.emprunteDocument(2, 3);
 
-        System.out.println(es.getRapportsEmprunts(2));
 
         System.out.println(ps.findEmprunteur(2));
         System.out.println(ps.findPrepose(1));
+
+        System.out.println(es.getRapportsEmprunts(2));
+        //System.out.println(es.getRapportsEmprunts(3));
+
+        System.out.println(ps.findCdByTitle("Wall"));
+        System.out.println(ps.findLivreByAuthor("Rowling"));
         Thread.currentThread().join();
     }
 }

@@ -22,6 +22,7 @@ public class Emprunt {
     private int id;
 
     private LocalDate dateEmprunt;
+    private LocalDate dateRetour;
     private String status;
 
     @ManyToOne
@@ -33,10 +34,24 @@ public class Emprunt {
     private Document document;
 
 
-    public Emprunt(LocalDate dateEmprunt, String status, Emprunteur emprunteur, Document document) {
+    public Emprunt(LocalDate dateEmprunt, LocalDate dateRetour, String status, Emprunteur emprunteur, Document document) {
         this.dateEmprunt = dateEmprunt;
         this.status = status;
         this.emprunteur = emprunteur;
         this.document = document;
+        this.dateRetour = dateRetour;
     }
+
+    @Override
+    public String toString() {
+        return "Emprunt{" +
+                "id=" + id +
+                ", document='" + document.getTitre() + '\'' +
+                ", emprunteur='" + emprunteur.getFirstName() + " " + emprunteur.getLastName() + '\'' +
+                ", dateEmprunt=" + dateEmprunt +
+                ", dateRetour=" + dateRetour +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
 }

@@ -2,10 +2,7 @@ package ca.cal.tp2.repository;
 
 
 import ca.cal.tp2.exception.DatabaseException;
-import ca.cal.tp2.modele.Document;
-import ca.cal.tp2.modele.Emprunt;
-import ca.cal.tp2.modele.Emprunteur;
-import ca.cal.tp2.modele.Prepose;
+import ca.cal.tp2.modele.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -69,29 +66,44 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
                 throw new DatabaseException("Aucun exemplaire disponible pour ce document.");
             }
 
+            // Déterminer la date de retour en fonction du type de document
+            LocalDate dateRetour;
+            if (document instanceof Livre) {
+                dateRetour = LocalDate.now().plusWeeks(3);
+            } else if (document instanceof CD) {
+                dateRetour = LocalDate.now().plusWeeks(2);
+            } else if (document instanceof DVD) {
+                dateRetour = LocalDate.now().plusWeeks(1);
+            } else {
+                throw new DatabaseException("Type de document inconnu.");
+            }
+
             // Créer un emprunt
             Emprunt emprunt = new Emprunt();
             emprunt.setDocument(document);
             emprunt.setEmprunteur(emprunteur);
             emprunt.setDateEmprunt(LocalDate.now());
+            emprunt.setDateRetour(dateRetour);
+            emprunt.setStatus("Emprunté");// Définition de la date de retour
 
             // Mettre à jour le nombre d'exemplaires du document
             document.setNbExemplaires(document.getNbExemplaires() - 1);
 
-            // Sauvegarder l'emprunt et l'emprunteur
+            // Sauvegarder l'emprunt et mettre à jour le document
             em.persist(emprunt);
-            em.merge(document);  // Met à jour le document
+            em.merge(document);
 
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback(); // Annuler en cas d'erreur
+                em.getTransaction().rollback();
             }
             throw new DatabaseException("Erreur lors de l'emprunt du document.", e);
         } finally {
             em.close();
         }
     }
+
 
 
     @Override

@@ -59,8 +59,8 @@ public class DvdRepositoryJPA implements DvdRepository{
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             TypedQuery<DVD> query = em.createQuery(
-                    "SELECT d FROM DVD d WHERE d.director = :director", DVD.class);
-            query.setParameter("director", director);
+                    "SELECT d FROM DVD d WHERE d.director LIKE :director", DVD.class);
+            query.setParameter("director", "%" + director + "%");
             DVD dvd = query.getSingleResult();
             em.getTransaction().commit();
             return dvd;

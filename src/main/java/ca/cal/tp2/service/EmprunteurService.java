@@ -46,7 +46,11 @@ public class EmprunteurService {
     public List<Emprunt> getRapportsEmprunts(long emprunteurId){
         try {
             Emprunteur emprunteur = emprunteurRepository.find(emprunteurId);
-            return emprunteur.getEmprunts();
+            List <Emprunt> emprunts = emprunteur.getEmprunts();
+            if (emprunts.isEmpty()) {
+                throw new DatabaseException("Aucun emprunt trouvé pour cet emprunteur.");
+            }
+            return emprunts;
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la récupération des emprunts de l'emprunteur", e);
         }

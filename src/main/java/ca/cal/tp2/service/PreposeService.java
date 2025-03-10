@@ -16,7 +16,8 @@ public class PreposeService {
     private final LivreRepositoryJPA livreRepository;
 
     public PreposeService(PreposeRepositoryJPA preposeRepository, EmprunteurRepositoryJPA emprunteurRepository,
-                          CdRepositoryJPA cdRepository, DvdRepositoryJPA dvdRepository, LivreRepositoryJPA livreRepository) {
+                          CdRepositoryJPA cdRepository, DvdRepositoryJPA dvdRepository,
+                          LivreRepositoryJPA livreRepository) {
         this.preposeRepository = preposeRepository;
         this.emprunteurRepository = emprunteurRepository;
         this.cdRepository = cdRepository;
@@ -24,7 +25,8 @@ public class PreposeService {
         this.livreRepository = livreRepository;
     }
 
-    public void createPrepose(String firstName, String lastName, String email, String phoneNumber, String numEmploye) throws DatabaseException {
+    public void createPrepose(String firstName, String lastName, String email,
+                              String phoneNumber, String numEmploye) throws DatabaseException {
         try {
             preposeRepository.save(new Prepose(firstName, lastName, email, phoneNumber, numEmploye));
         } catch (DatabaseException e) {
@@ -40,9 +42,12 @@ public class PreposeService {
         return PreposeDTO.toDto(prepose);
     }
 
-    public void createEmprunteur(String firstName, String lastName, String email, String phoneNumber, double fineBalance, List<Emprunt> emprunts, List<Amende> amendes) throws DatabaseException {
+    public void createEmprunteur(String firstName, String lastName, String email, String phoneNumber,
+                                 double fineBalance, List<Emprunt> emprunts, List<Amende> amendes)
+                                throws DatabaseException {
         try {
-            emprunteurRepository.save(new Emprunteur(firstName, lastName, email, phoneNumber, fineBalance, emprunts, amendes));
+            emprunteurRepository.save(new Emprunteur(firstName, lastName,
+                    email, phoneNumber, fineBalance, emprunts, amendes));
         } catch (DatabaseException e) {
             System.out.println("Erreur lors de la création du préposé");
         }
@@ -56,7 +61,8 @@ public class PreposeService {
         return EmprunteurDTO.toDto(emprunteur);
     }
 
-    public void saveCd(String titre, String artiste, long duration, String genre, long nbExemplaires) throws DatabaseException {
+    public void saveCd(String titre, String artiste, long duration, String genre,
+                       long nbExemplaires) throws DatabaseException {
         try {
             cdRepository.save(new CD(titre, artiste, duration, genre, nbExemplaires));
         } catch (DatabaseException e) {
@@ -64,21 +70,6 @@ public class PreposeService {
         }
     }
 
-    public CdDTO findCd(long id) {
-        CD cd = cdRepository.find(id);
-        if (cd == null) {
-            throw new RuntimeException("CD n'existe pas");
-        }
-        return CdDTO.toDto(cd);
-    }
-
-    public void saveDvd(String titre, String director, long duree, String rating, long nbExemplaires) throws DatabaseException {
-        try {
-            dvdRepository.save(new DVD(titre, director, duree, rating, nbExemplaires));
-        } catch (DatabaseException e) {
-            System.out.println("Erreur lors de la création du DVD");
-        }
-    }
 
     public DvdDTO findDvd(long id) throws DatabaseException {
         DVD dvd = dvdRepository.find(id);
@@ -87,8 +78,57 @@ public class PreposeService {
         }
         return DvdDTO.toDto(dvd);
     }
+    public DvdDTO findDvdByTitle(String titre) throws DatabaseException {
+        DVD dvd = dvdRepository.findByTitle(titre);
+        if (dvd == null) {
+            throw new RuntimeException("Aucun DVD trouvé avec le titre : " + titre);
+        }
+        return DvdDTO.toDto(dvd);
+    }
 
-    public void saveLivre(String titre, String auteur, long anneePublication, long nbExemplaires) throws DatabaseException {
+    public DvdDTO findDvdByDirector(String director) throws DatabaseException {
+        DVD dvd = dvdRepository.findByDirector(director);
+        if (dvd == null) {
+            throw new RuntimeException("Aucun DVD trouvé avec le directeur : " + director);
+        }
+        return DvdDTO.toDto(dvd);
+    }
+
+    public void saveDvd(String titre, String director, long duree, String rating,
+                        long nbExemplaires) throws DatabaseException {
+        try {
+            dvdRepository.save(new DVD(titre, director, duree, rating, nbExemplaires));
+        } catch (DatabaseException e) {
+            System.out.println("Erreur lors de la création du DVD");
+        }
+    }
+
+    public CdDTO findCd(long id) {
+         CD cd = cdRepository.find(id);
+         if (cd == null) {
+            throw new RuntimeException("CD n'existe pas");
+         }
+         return CdDTO.toDto(cd);
+    }
+
+    public CdDTO findCdByTitle(String titre) throws DatabaseException {
+        CD cd = cdRepository.findByTitle(titre);
+        if (cd == null) {
+            throw new RuntimeException("Aucun CD trouvé avec le titre : " + titre);
+        }
+        return CdDTO.toDto(cd);
+    }
+
+    public CdDTO findCdByArtist(String artiste) throws DatabaseException {
+        CD cd = cdRepository.findByArtist(artiste);
+        if (cd == null) {
+            throw new RuntimeException("Aucun CD trouvé avec l'artiste : " + artiste);
+        }
+        return CdDTO.toDto(cd);
+    }
+
+    public void saveLivre(String titre, String auteur,
+                          long anneePublication, long nbExemplaires) throws DatabaseException {
         try {
             livreRepository.save(new Livre(titre, auteur, anneePublication, nbExemplaires));
         } catch (DatabaseException e) {
@@ -100,6 +140,30 @@ public class PreposeService {
         Livre livre = livreRepository.find(id);
         if (livre == null) {
             throw new RuntimeException("Livre n'existe pas");
+        }
+        return LivreDTO.toDto(livre);
+    }
+
+    public LivreDTO findLivreByTitle(String titre) throws DatabaseException {
+        Livre livre = livreRepository.findByTitle(titre);
+        if (livre == null) {
+            throw new RuntimeException("Aucun livre trouvé avec le titre : " + titre);
+        }
+        return LivreDTO.toDto(livre);
+    }
+
+    public LivreDTO findLivreByAuthor(String auteur) throws DatabaseException {
+        Livre livre = livreRepository.findByAuthor(auteur);
+        if (livre == null) {
+            throw new RuntimeException("Aucun livre trouvé de l'auteur : " + auteur);
+        }
+        return LivreDTO.toDto(livre);
+    }
+
+    public LivreDTO findLivreByYear(long anneePublication) throws DatabaseException {
+        Livre livre = livreRepository.findByYear(anneePublication);
+        if (livre == null) {
+            throw new RuntimeException("Aucun livre trouvé pour l'année : " + anneePublication);
         }
         return LivreDTO.toDto(livre);
     }
