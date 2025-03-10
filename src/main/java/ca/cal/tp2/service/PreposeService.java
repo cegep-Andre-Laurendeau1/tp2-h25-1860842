@@ -34,10 +34,10 @@ public class PreposeService {
         }
     }
 
-    public PreposeDTO findPrepose(long id) {
+    public PreposeDTO findPrepose(long id) throws DatabaseException {
         Prepose prepose = preposeRepository.find(id);
         if (prepose == null) {
-            throw new RuntimeException("Prepose n'existe pas");
+            throw new DatabaseException("Prepose n'existe pas");
         }
         return PreposeDTO.toDto(prepose);
     }
@@ -56,7 +56,7 @@ public class PreposeService {
     public EmprunteurDTO findEmprunteur(long id) throws DatabaseException {
         Emprunteur emprunteur = emprunteurRepository.find(id);
         if (emprunteur == null) {
-            throw new RuntimeException("Emprunteur n'existe pas");
+            throw new DatabaseException("Emprunteur n'existe pas");
         }
         return EmprunteurDTO.toDto(emprunteur);
     }
@@ -74,14 +74,14 @@ public class PreposeService {
     public DvdDTO findDvd(long id) throws DatabaseException {
         DVD dvd = dvdRepository.find(id);
         if (dvd == null) {
-            throw new RuntimeException("DVD n'existe pas");
+            throw new DatabaseException("DVD n'existe pas");
         }
         return DvdDTO.toDto(dvd);
     }
     public DvdDTO findDvdByTitle(String titre) throws DatabaseException {
         DVD dvd = dvdRepository.findByTitle(titre);
         if (dvd == null) {
-            throw new RuntimeException("Aucun DVD trouvé avec le titre : " + titre);
+            throw new DatabaseException("Aucun DVD trouvé avec le titre : " + titre);
         }
         return DvdDTO.toDto(dvd);
     }
@@ -89,7 +89,7 @@ public class PreposeService {
     public DvdDTO findDvdByDirector(String director) throws DatabaseException {
         DVD dvd = dvdRepository.findByDirector(director);
         if (dvd == null) {
-            throw new RuntimeException("Aucun DVD trouvé avec le directeur : " + director);
+            throw new DatabaseException("Aucun DVD trouvé avec le directeur : " + director);
         }
         return DvdDTO.toDto(dvd);
     }
@@ -103,10 +103,10 @@ public class PreposeService {
         }
     }
 
-    public CdDTO findCd(long id) {
+    public CdDTO findCd(long id) throws DatabaseException {
          CD cd = cdRepository.find(id);
          if (cd == null) {
-            throw new RuntimeException("CD n'existe pas");
+            throw new DatabaseException("CD n'existe pas");
          }
          return CdDTO.toDto(cd);
     }
@@ -114,7 +114,7 @@ public class PreposeService {
     public CdDTO findCdByTitle(String titre) throws DatabaseException {
         CD cd = cdRepository.findByTitle(titre);
         if (cd == null) {
-            throw new RuntimeException("Aucun CD trouvé avec le titre : " + titre);
+            throw new DatabaseException("Aucun CD trouvé avec le titre : " + titre);
         }
         return CdDTO.toDto(cd);
     }
@@ -122,7 +122,7 @@ public class PreposeService {
     public CdDTO findCdByArtist(String artiste) throws DatabaseException {
         CD cd = cdRepository.findByArtist(artiste);
         if (cd == null) {
-            throw new RuntimeException("Aucun CD trouvé avec l'artiste : " + artiste);
+            throw new DatabaseException("Aucun CD trouvé avec l'artiste : " + artiste);
         }
         return CdDTO.toDto(cd);
     }
@@ -139,7 +139,7 @@ public class PreposeService {
     public LivreDTO findLivre(long id) throws DatabaseException {
         Livre livre = livreRepository.find(id);
         if (livre == null) {
-            throw new RuntimeException("Livre n'existe pas");
+            throw new DatabaseException("Livre n'existe pas");
         }
         return LivreDTO.toDto(livre);
     }
@@ -147,7 +147,7 @@ public class PreposeService {
     public LivreDTO findLivreByTitle(String titre) throws DatabaseException {
         Livre livre = livreRepository.findByTitle(titre);
         if (livre == null) {
-            throw new RuntimeException("Aucun livre trouvé avec le titre : " + titre);
+            throw new DatabaseException("Aucun livre trouvé avec le titre : " + titre);
         }
         return LivreDTO.toDto(livre);
     }
@@ -155,7 +155,7 @@ public class PreposeService {
     public LivreDTO findLivreByAuthor(String auteur) throws DatabaseException {
         Livre livre = livreRepository.findByAuthor(auteur);
         if (livre == null) {
-            throw new RuntimeException("Aucun livre trouvé de l'auteur : " + auteur);
+            throw new DatabaseException("Aucun livre trouvé de l'auteur : " + auteur);
         }
         return LivreDTO.toDto(livre);
     }
@@ -163,16 +163,16 @@ public class PreposeService {
     public LivreDTO findLivreByYear(long anneePublication) throws DatabaseException {
         Livre livre = livreRepository.findByYear(anneePublication);
         if (livre == null) {
-            throw new RuntimeException("Aucun livre trouvé pour l'année : " + anneePublication);
+            throw new DatabaseException("Aucun livre trouvé pour l'année : " + anneePublication);
         }
         return LivreDTO.toDto(livre);
     }
 
     public List<Emprunt> getRapportEmprunts() throws DatabaseException {
         try {
-            return preposeRepository.getRapportEmprunts(); // Assuming the method is implemented in PreposeRepositoryJPA
+            return preposeRepository.getRapportEmprunts(); 
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la récupération des emprunts", e);
+            throw new DatabaseException("Erreur lors de la récupération des emprunts", e);
         }
     }
 

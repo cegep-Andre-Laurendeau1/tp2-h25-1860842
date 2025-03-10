@@ -1,7 +1,6 @@
 package ca.cal.tp2.modele;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

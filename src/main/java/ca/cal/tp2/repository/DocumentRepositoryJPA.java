@@ -1,8 +1,5 @@
 package ca.cal.tp2.repository;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import ca.cal.tp2.exception.DatabaseException;
 import ca.cal.tp2.modele.Document;
 import jakarta.persistence.EntityManager;

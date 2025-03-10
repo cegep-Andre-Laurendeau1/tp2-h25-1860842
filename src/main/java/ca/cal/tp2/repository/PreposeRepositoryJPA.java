@@ -67,7 +67,8 @@ public class PreposeRepositoryJPA implements PreposeRepository {
 
     public void afficherTousLesEmprunteurs() throws DatabaseException{
         try (EntityManager em = emf.createEntityManager()) {
-            List<Emprunteur> emprunteurs = em.createQuery("SELECT e FROM Emprunteur e", Emprunteur.class).getResultList();
+            List<Emprunteur> emprunteurs = em.createQuery("SELECT e FROM Emprunteur e",
+                                            Emprunteur.class).getResultList();
             for (Emprunteur e : emprunteurs) {
                 System.out.println("Emprunteur : " + e.getFirstName() + " " + e.getLastName());
             }

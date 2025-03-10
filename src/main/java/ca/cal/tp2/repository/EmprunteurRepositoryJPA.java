@@ -35,7 +35,8 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     public Emprunteur find(long id) throws DatabaseException {
         try (EntityManager em = emf.createEntityManager()) {
             Emprunteur emprunteur = em.createQuery(
-                            "SELECT e FROM Emprunteur e LEFT JOIN FETCH e.emprunts WHERE e.id = :id", Emprunteur.class)
+                            "SELECT e FROM Emprunteur e " +
+                                    "LEFT JOIN FETCH e.emprunts WHERE e.id = :id", Emprunteur.class)
                     .setParameter("id", id)
                     .getSingleResult();
 
@@ -55,18 +56,15 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
         try {
             em.getTransaction().begin();
 
-            // Vérifier si l'emprunteur existe
             Emprunteur emprunteur = em.find(Emprunteur.class, emprunteurId);
             if (emprunteur == null) {
                 throw new DatabaseException("Emprunteur non trouvé.");
             }
 
-            // Vérifier si le document est disponible
             if (document.getNbExemplaires() <= 0) {
                 throw new DatabaseException("Aucun exemplaire disponible pour ce document.");
             }
 
-            // Déterminer la date de retour en fonction du type de document
             LocalDate dateRetour;
             if (document instanceof Livre) {
                 dateRetour = LocalDate.now().plusWeeks(3);
@@ -78,18 +76,15 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
                 throw new DatabaseException("Type de document inconnu.");
             }
 
-            // Créer un emprunt
             Emprunt emprunt = new Emprunt();
             emprunt.setDocument(document);
             emprunt.setEmprunteur(emprunteur);
             emprunt.setDateEmprunt(LocalDate.now());
             emprunt.setDateRetour(dateRetour);
-            emprunt.setStatus("Emprunté");// Définition de la date de retour
+            emprunt.setStatus("Emprunté");
 
-            // Mettre à jour le nombre d'exemplaires du document
             document.setNbExemplaires(document.getNbExemplaires() - 1);
 
-            // Sauvegarder l'emprunt et mettre à jour le document
             em.persist(emprunt);
             em.merge(document);
 

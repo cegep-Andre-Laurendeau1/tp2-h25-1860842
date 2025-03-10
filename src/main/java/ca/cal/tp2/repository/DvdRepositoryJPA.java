@@ -1,7 +1,6 @@
 package ca.cal.tp2.repository;
 
 import ca.cal.tp2.exception.DatabaseException;
-import ca.cal.tp2.modele.CD;
 import ca.cal.tp2.modele.DVD;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
