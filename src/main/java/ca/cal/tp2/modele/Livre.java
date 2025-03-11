@@ -13,7 +13,7 @@ public class Livre extends Document{
     private long anneePublication;
 
 
-    public Livre(String titre, String auteur, long nbExemplaires, long anneePublication) {
+    public Livre(String titre, String auteur, long anneePublication, long nbExemplaires) {
         super(titre, nbExemplaires);
         this.auteur = auteur;
         this.anneePublication = anneePublication;
