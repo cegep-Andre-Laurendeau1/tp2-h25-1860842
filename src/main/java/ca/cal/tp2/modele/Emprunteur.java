@@ -16,7 +16,7 @@ public class Emprunteur extends Utilisateur{
     @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.ALL)
     private List<Emprunt> emprunts;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Amende> amendes;
 
     public Emprunteur (String firstName, String lastName, String email, String phoneNumber,

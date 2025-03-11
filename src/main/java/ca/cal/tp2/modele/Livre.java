@@ -12,7 +12,6 @@ public class Livre extends Document{
     private String auteur;
     private long anneePublication;
 
-
     public Livre(String titre, String auteur, long anneePublication, long nbExemplaires) {
         super(titre, nbExemplaires);
         this.auteur = auteur;
