@@ -18,7 +18,6 @@ public class Emprunt {
     private int id;
 
     private LocalDate dateEmprunt;
-    private LocalDate dateRetour;
     private String status;
 
     @ManyToOne
@@ -29,13 +28,15 @@ public class Emprunt {
     @JoinColumn(name = "document_id", referencedColumnName = "documentID", nullable = false)
     private Document document;
 
+    @OneToOne(mappedBy = "emprunt", cascade = CascadeType.ALL)
+    private EmpruntDetail empruntDetail;
 
-    public Emprunt(LocalDate dateEmprunt, LocalDate dateRetour, String status, Emprunteur emprunteur, Document document) {
+
+    public Emprunt(LocalDate dateEmprunt, String status, Emprunteur emprunteur, Document document) {
         this.dateEmprunt = dateEmprunt;
         this.status = status;
         this.emprunteur = emprunteur;
         this.document = document;
-        this.dateRetour = dateRetour;
     }
 
     @Override
@@ -45,9 +46,12 @@ public class Emprunt {
                 ", idEmprunt=" + id +
                 ", document='" + document.getTitre() + '\'' +
                 ", dateEmprunt=" + dateEmprunt +
-                ", dateRetour=" + dateRetour +
                 ", status='" + status + '\'' +
+                (empruntDetail != null ?
+                        ", dateRetourPrevue=" + empruntDetail.getDateRetourPrevue() +
+                                ", dateRetourActuelle=" + empruntDetail.getDateRetourActuelle() +
+                                ", statutRetour='" + empruntDetail.getStatus() + '\'' :
+                        ", Pas de détails d'emprunt disponibles") +
                 '}';
     }
-
 }

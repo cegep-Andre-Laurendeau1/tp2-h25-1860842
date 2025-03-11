@@ -30,10 +30,10 @@ public class Main {
                 "5141234567", 3.42, null, null);
 
         ps.saveCd("Thriller", "Michael Jackson", 42, "Pop", 5);
-        ps.saveCd("The Wall", "Pink Floyd", 42, "Rock", 6);
-        ps.saveDvd("The Dark Knight", "Christopher Nolan", 42, "Action", 3);
-        ps.saveDvd("Inception", "Christopher Nolan", 42, "Action", 1);
-        ps.saveLivre("Harry Potter", "J.K. Rowling", 2001, 4);
+        ps.saveCd("The Wall", "Pink Floyd", 20, "Rock", 6);
+        ps.saveDvd("The Dark Knight", "Christopher Nolan", 123, "Action", 3);
+        ps.saveDvd("Inception", "Christopher Nolan", 142, "Action", 1);
+        ps.saveLivre("Harry Potter and The Deathly Hallows", "J.K. Rowling", 2001, 4);
         ps.saveLivre("The Hobbit", "J.R.R. Tolkien", 2012, 2);
         System.out.println(ps.findCd(1));
 

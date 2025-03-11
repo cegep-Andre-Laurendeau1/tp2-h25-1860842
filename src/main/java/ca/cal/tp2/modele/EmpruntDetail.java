@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -19,11 +19,11 @@ public class EmpruntDetail {
     @JoinColumn(name = "emprunt_id", referencedColumnName = "id", nullable = false, unique = true)
     Emprunt emprunt;
 
-    private Date dateRetourPrevue;
-    private Date dateRetourActuelle;
+    private LocalDate dateRetourPrevue;
+    private LocalDate dateRetourActuelle;
     private String status;
 
-    public EmpruntDetail(Emprunt emprunt, Date dateRetourPrevue, Date dateRetourActuelle, String status) {
+    public EmpruntDetail(Emprunt emprunt, LocalDate dateRetourPrevue, LocalDate dateRetourActuelle, String status) {
         this.emprunt = emprunt;
         this.dateRetourPrevue = dateRetourPrevue;
         this.dateRetourActuelle = dateRetourActuelle;

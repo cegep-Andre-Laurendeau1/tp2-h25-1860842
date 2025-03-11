@@ -65,13 +65,13 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
                 throw new DatabaseException("Aucun exemplaire disponible pour ce document.");
             }
 
-            LocalDate dateRetour;
+            LocalDate dateRetourPrevue;
             if (document instanceof Livre) {
-                dateRetour = LocalDate.now().plusWeeks(3);
+                dateRetourPrevue = LocalDate.now().plusWeeks(3);
             } else if (document instanceof CD) {
-                dateRetour = LocalDate.now().plusWeeks(2);
+                dateRetourPrevue = LocalDate.now().plusWeeks(2);
             } else if (document instanceof DVD) {
-                dateRetour = LocalDate.now().plusWeeks(1);
+                dateRetourPrevue = LocalDate.now().plusWeeks(1);
             } else {
                 throw new DatabaseException("Type de document inconnu.");
             }
@@ -80,12 +80,15 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
             emprunt.setDocument(document);
             emprunt.setEmprunteur(emprunteur);
             emprunt.setDateEmprunt(LocalDate.now());
-            emprunt.setDateRetour(dateRetour);
             emprunt.setStatus("Emprunté");
+
+            EmpruntDetail empruntDetail = new EmpruntDetail(emprunt, dateRetourPrevue, null, "Emprunté");
+            emprunt.setEmpruntDetail(empruntDetail);
 
             document.setNbExemplaires(document.getNbExemplaires() - 1);
 
             em.persist(emprunt);
+            em.persist(empruntDetail);
             em.merge(document);
 
             em.getTransaction().commit();
@@ -114,17 +117,14 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     @Override
     public List<Emprunt> rapportHistoriqueEmprunts(long id) throws DatabaseException {
         try (EntityManager em = emf.createEntityManager()) {
-            // Utilisation de LEFT JOIN FETCH pour charger 'Emprunts' avec 'Emprunteur'
-            Emprunteur emprunteur = em.createQuery(
-                            "SELECT e FROM Emprunteur e LEFT JOIN FETCH e.emprunts WHERE e.id = :id", Emprunteur.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
-
-            if (emprunteur == null) {
-                throw new DatabaseException("Emprunteur non trouvé.");
-            }
-
-            return emprunteur.getEmprunts();
+            TypedQuery<Emprunt> query = em.createQuery(
+                    "SELECT e FROM Emprunt e " +
+                            "LEFT JOIN FETCH e.emprunteur " +
+                            "LEFT JOIN FETCH e.document " +
+                            "LEFT JOIN FETCH e.empruntDetail " +
+                            "WHERE e.emprunteur.id = :id", Emprunt.class);
+            query.setParameter("id", id);
+            return query.getResultList();
         } catch (Exception e) {
             throw new DatabaseException("Erreur lors de la récupération de l'historique des emprunts.", e);
         }
