@@ -175,7 +175,4 @@ public class PreposeService {
             throw new DatabaseException("Erreur lors de la récupération des emprunts", e);
         }
     }
-
-
-
 }

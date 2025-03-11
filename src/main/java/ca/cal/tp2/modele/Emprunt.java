@@ -31,7 +31,6 @@ public class Emprunt {
     @OneToOne(mappedBy = "emprunt", cascade = CascadeType.ALL)
     private EmpruntDetail empruntDetail;
 
-
     public Emprunt(LocalDate dateEmprunt, String status, Emprunteur emprunteur, Document document) {
         this.dateEmprunt = dateEmprunt;
         this.status = status;

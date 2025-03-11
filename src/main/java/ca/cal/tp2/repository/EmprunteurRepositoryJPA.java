@@ -82,7 +82,8 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
             emprunt.setDateEmprunt(LocalDate.now());
             emprunt.setStatus("Emprunté");
 
-            EmpruntDetail empruntDetail = new EmpruntDetail(emprunt, dateRetourPrevue, null, "Emprunté");
+            EmpruntDetail empruntDetail = new EmpruntDetail(emprunt, dateRetourPrevue,
+                    null, "Emprunté");
             emprunt.setEmpruntDetail(empruntDetail);
 
             document.setNbExemplaires(document.getNbExemplaires() - 1);
@@ -101,8 +102,6 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
             em.close();
         }
     }
-
-
 
     @Override
     public void retourne(Document document) throws DatabaseException {
