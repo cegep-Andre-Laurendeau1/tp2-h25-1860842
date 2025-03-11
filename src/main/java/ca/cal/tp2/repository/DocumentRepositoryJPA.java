@@ -9,7 +9,6 @@ import jakarta.persistence.TypedQuery;
 
 public class DocumentRepositoryJPA implements DocumentRepository {
 
-    // Le UnitName doit etre le meme que persistance.xml
     private final EntityManagerFactory emf =
             Persistence.createEntityManagerFactory("tp2.pu");
 
