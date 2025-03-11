@@ -84,5 +84,4 @@ public class LivreRepositoryJPA implements LivreRepository {
             throw new DatabaseException(e);
         }
     }
-
 }
