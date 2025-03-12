@@ -16,8 +16,7 @@ public abstract class Document {
     private long documentID;
 
     private String titre;
-    @Setter
-    private long nbExemplaires;
+    private final long nbExemplaires;
 
     public Document(String titre, long nbExemplaires) {
         this.titre = titre;

@@ -3,6 +3,7 @@ package ca.cal.tp2.modele;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class Emprunteur extends Utilisateur{
     private double fineBalance;
 
+    @Setter
     @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.ALL)
     private List<Emprunt> emprunts;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @Setter
+    @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.ALL)
     private List<Amende> amendes;
 
     public Emprunteur (String firstName, String lastName, String email, String phoneNumber,

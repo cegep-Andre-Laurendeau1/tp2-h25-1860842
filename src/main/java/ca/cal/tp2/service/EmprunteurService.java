@@ -1,6 +1,7 @@
 package ca.cal.tp2.service;
 
 import ca.cal.tp2.exception.DatabaseException;
+import ca.cal.tp2.exception.EntityDoesNotExist;
 import ca.cal.tp2.modele.Document;
 import ca.cal.tp2.modele.Emprunt;
 import ca.cal.tp2.modele.Emprunteur;
@@ -27,7 +28,7 @@ public class EmprunteurService {
         }
 
         try {
-            emprunteurRepository.emprunte(document, emprunteurId);
+            emprunteurRepository.emprunte(documentId, emprunteurId);
             System.out.println("Document emprunté avec succès.");
         } catch (DatabaseException e) {
             throw new DatabaseException("Erreur lors de l'emprunt du document.", e);

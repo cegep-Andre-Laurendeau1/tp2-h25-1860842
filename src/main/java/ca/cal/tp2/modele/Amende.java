@@ -19,19 +19,17 @@ public class Amende {
     private double montant;
     private LocalDate dateCreation;
     private boolean payed;
-    
-    public Amende(long id, double montant, LocalDate dateCreation, boolean payed) {
+
+    @ManyToOne
+    @JoinColumn(name = "emprunteur_id", referencedColumnName = "id", nullable = false)
+    private Emprunteur emprunteur;
+
+
+    public Amende(long id, double montant, LocalDate dateCreation, boolean payed, Emprunteur emprunteur) {
         this.id = id;
         this.montant = montant;
         this.dateCreation = dateCreation;
         this.payed = payed;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
+        this.emprunteur = emprunteur;
     }
 }

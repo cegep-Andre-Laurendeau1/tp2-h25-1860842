@@ -2,6 +2,7 @@ package ca.cal.tp2.repository;
 
 
 import ca.cal.tp2.exception.DatabaseException;
+import ca.cal.tp2.exception.EntityDoesNotExist;
 import ca.cal.tp2.modele.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -32,36 +33,60 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     }
 
     @Override
-    public Emprunteur find(long id) throws DatabaseException {
+    public Emprunteur find(long id) throws EntityDoesNotExist {
         try (EntityManager em = emf.createEntityManager()) {
             Emprunteur emprunteur = em.createQuery(
-                            "SELECT e FROM Emprunteur e " +
-                                    "LEFT JOIN FETCH e.emprunts WHERE e.id = :id", Emprunteur.class)
+                            "SELECT e FROM Emprunteur e WHERE e.id = :id", Emprunteur.class)
                     .setParameter("id", id)
                     .getSingleResult();
 
             if (emprunteur == null) {
-                throw new DatabaseException("Emprunteur non trouvé.");
+                throw new EntityDoesNotExist("Emprunteur non trouvé.");
             }
 
+            emprunteur.setEmprunts(em.createQuery(
+                            "SELECT e FROM Emprunt e WHERE e.emprunteur.id = :id", Emprunt.class)
+                    .setParameter("id", id)
+                    .getResultList());
+
+            emprunteur.setAmendes(em.createQuery(
+                            "SELECT a FROM Amende a WHERE a.emprunteur.id = :id", Amende.class)
+                    .setParameter("id", id)
+                    .getResultList());
+            
             return emprunteur;
+
         } catch (Exception e) {
-            throw new DatabaseException("Erreur lors de la récupération de l'emprunteur.", e);
+            throw new EntityDoesNotExist("Erreur lors de la récupération de l'emprunteur.", e);
         }
     }
 
     @Override
-    public void emprunte(Document document, long emprunteurId) throws DatabaseException {
+    public void emprunte(long documentId, long emprunteurId) throws DatabaseException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
 
             Emprunteur emprunteur = em.find(Emprunteur.class, emprunteurId);
+
             if (emprunteur == null) {
-                throw new DatabaseException("Emprunteur non trouvé.");
+                throw new DatabaseException("Emprunteur non trouvé avec l'ID : " + emprunteurId);
             }
 
-            if (document.getNbExemplaires() <= 0) {
+            Document document = em.find(Document.class, documentId);
+
+            if (document == null) {
+                throw new EntityDoesNotExist("Le document n'existe pas.");
+            }
+
+            long nbEmpruntes = (long) em.createQuery(
+                            "SELECT COUNT(ed) FROM EmpruntDetail ed " +
+                                    "WHERE ed.emprunt.document.documentID = :documentId " +
+                                    "AND ed.dateRetourActuelle IS NULL")
+                    .setParameter("documentId", documentId)
+                    .getSingleResult();
+
+            if (document.getNbExemplaires() <= nbEmpruntes) {
                 throw new DatabaseException("Aucun exemplaire disponible pour ce document.");
             }
 
@@ -76,17 +101,13 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
                 throw new DatabaseException("Type de document inconnu.");
             }
 
-            Emprunt emprunt = new Emprunt();
-            emprunt.setDocument(document);
-            emprunt.setEmprunteur(emprunteur);
-            emprunt.setDateEmprunt(LocalDate.now());
-            emprunt.setStatus("Emprunté");
+            Emprunt emprunt = new Emprunt(
+                    LocalDate.now(), "Emprunté", emprunteur, document);
 
             EmpruntDetail empruntDetail = new EmpruntDetail(emprunt, dateRetourPrevue,
                     null, "Emprunté");
-            emprunt.setEmpruntDetail(empruntDetail);
 
-            document.setNbExemplaires(document.getNbExemplaires() - 1);
+            emprunt.setEmpruntDetail(empruntDetail);
 
             em.persist(emprunt);
             em.persist(empruntDetail);
